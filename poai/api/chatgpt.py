@@ -9,20 +9,28 @@
 import openai
 
 
-def chat(api_key, prompt, model_engine="text-davinci-002"):
+def chat(api_key, prompt, model_engine="gpt-3.5-turbo"):
     # 设置 API Key
     openai.api_key = api_key  # your_api_key
 
-    completions = openai.Completion.create(
-        engine=model_engine,
-        prompt=prompt,
-        max_tokens=1024,
-        n=1,
-        stop=None,
-        temperature=0.5,
-    )
-
+    # completions = openai.Completion.create(
+    #     engine=model_engine,
+    #     prompt=prompt,
+    #     max_tokens=1024,
+    #     n=1,
+    #     stop=None,
+    #     temperature=0.5,
+    # )
     # 获取 ChatGPT 的回复
-    message = completions.choices[0].text
+    # message = completions.choices[0].text
+
+    res = openai.ChatCompletion.create(
+        model=model_engine,
+        messages=[
+            {"role": "system", "content": "you are a wonderful assistant."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    message = res["choices"][0]["message"]["content"]
     print(message)
     return message
